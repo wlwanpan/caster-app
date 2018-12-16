@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { AsyncStorage, StyleSheet, ScrollView, Alert } from 'react-native'
-import { Header, Button, Container, Content, Form, Text, Item, Label, Input } from 'native-base'
+import { Header, Body, Right, Title, Button, Container,
+         Content, Form, Text, Item, Label, Input } from 'native-base'
 import DeviceList from './DeviceList'
 
 export default class Settings extends Component {
@@ -33,23 +34,35 @@ export default class Settings extends Component {
   render() {
     return (
       <Container>
+        <Header>
+          <Body>
+            <Title>Settings</Title>
+          </Body>
+          <Right>
+            <Button transparent>
+              <Text>Cancel</Text>
+            </Button>
+          </Right>
+        </Header>
         <Content>
           <Form>
-            <Item stackedLabel style={{ marginTop: 10 }}>
+            <Item stackedLabel style={itemStyle}>
               <Label>Host Addr</Label>
               <Input
                 onChangeText={(addr) => this.setState({addr})}
                 value={this.state.addr}/>
             </Item>
-            <Item stackedLabel style={{ marginTop: 10 }}>
+            <Item stackedLabel style={itemStyle}>
               <Label>Host Port</Label>
               <Input
                 onChangeText={(port) => this.setState({port})}
                 value={this.state.port}/>
             </Item>
-            <Item stackedLabel style={{ marginTop: 10 }} last>
+            <Item stackedLabel style={itemStyle} last>
               <Label>Available Devices</Label>
-              <DeviceList onPress={(defaultDevice) => this.setState({defaultDevice})}/>
+              <DeviceList
+                baseurl={this.props.config.baseurl}
+                onPress={(defaultDevice) => this.setState({defaultDevice})}/>
             </Item>
           </Form>
           <Button
@@ -62,4 +75,8 @@ export default class Settings extends Component {
       </Container>
     )
   }
+}
+
+const itemStyle = {
+  marginTop: 10
 }

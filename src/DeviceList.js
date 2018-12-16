@@ -19,7 +19,7 @@ export default class DeviceList extends Component {
     }
     console.log('Fetching devices')
     this.setState({loading: true})
-    fetch('http://192.168.1.70:4040/devices')
+    fetch(`${this.props.baseurl}/devices`)
     .then((data) => {
       return data.json()
     })
@@ -28,7 +28,6 @@ export default class DeviceList extends Component {
       console.log(this.state.devices)
     })
     .catch((err) => {
-      console.log(err)
       Alert.alert("Error scanning devices.")
     })
     .finally(() => {

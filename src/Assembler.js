@@ -13,10 +13,12 @@ export default class Assembler extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      baseurl: '',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+      config: {
+        baseurl: '',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
       }
     }
   }
@@ -30,23 +32,24 @@ export default class Assembler extends Component {
         ...this.state.headers,
         'device-uuid': defaultDevice
       }
-      this.setState({baseurl, headers})
+      this.setState({
+        config: {baseurl, headers}
+      })
     })
   }
 
   render() {
     return (
       <Container>
-        <HeaderBar />
         <Router
           headerMode="screen">
-          <Scene key="root" baseurl={this.state.baseurl} headers={this.state.headers}>
-            <Scene key="movies" component={MovieList} initial={true} hideNavBar="true"/>
-            <Scene key="musics" component={MusicList} hideNavBar="true"/>
-            <Scene key="settings" component={Settings} hideNavBar="true"/>
+          <Scene key="root" config={this.state.config} hideNavBar="true">
+            <Scene key="movies" component={MovieList} initial={true}/>
+            <Scene key="musics" component={MusicList}/>
+            <Scene key="settings" component={Settings}/>
           </Scene>
         </Router>
-        <MenuBar />
+        <MenuBar config={this.state.config}/>
       </Container>
     )
   }

@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
-import { Text } from 'native-base'
+import { Container, Text } from 'native-base'
+import HeaderBar from './HeaderBar'
 
 export default class MusicList extends Component {
   render() {
     return (
-      <Text>Music List</Text>
+      <Container>
+        <HeaderBar />
+        <Text>Music List</Text>
+      </Container>
     )
   }
 }

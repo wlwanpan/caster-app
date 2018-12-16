@@ -1,37 +1,47 @@
 import React,{ Component } from 'react'
-import { ScrollView, Alert } from 'react-native'
-import { List, Text } from 'native-base'
+import { ScrollView, RefreshControl, Alert } from 'react-native'
+import { Container, List, Text, Spinner } from 'native-base'
+import { Actions } from 'react-native-router-flux'
 import Item from './Item'
+import HeaderBar from './HeaderBar'
 
 export default class MovieList extends Component {
 
   constructor(props) {
     super(props)
-    console.log(props)
     this.state = {
+      refreshing: false,
+      loading: false,
       movies: []
     }
   }
 
   componentDidMount() {
-    if (this.props.baseurl == '') {
-      return
+    if (this.props.config.baseurl != '') {
+      this._fetchMovies()
     }
+  }
+
+  _fetchMovies() {
     console.log("fetching movies")
-    fetch(`${this.props.baseurl}/media?type=audio`)
+    this.setState({loading: true})
+    fetch(`${this.props.config.baseurl}/media?type=audio`)
     .then((data) => {
       return data.json()
     })
     .then((resp) => {
       this.setState({movies: resp.data})
-      console.log(this.state.movies);
+      console.log(this.state.movies)
+    })
+    .finally(() => {
+      this.setState({loading: false})
     })
   }
 
   _onPressMovie(id) {
-    fetch(`${this.props.baseurl}/media/${id}/cast`, {
+    fetch(`${this.props.config.baseurl}/media/${id}/cast`, {
       method: 'POST',
-      headers: this.props.headers
+      headers: this.props.config.headers
     })
     .then((data) => {
       console.log(data)
@@ -40,6 +50,10 @@ export default class MovieList extends Component {
       console.log(err)
       Alert.alert("Error casting media.")
     })
+  }
+
+  _onRefresh() {
+    Actions.refresh(this.props)
   }
 
   _renderItem(item) {
@@ -51,13 +65,28 @@ export default class MovieList extends Component {
     )
   }
 
+  _refreshControl() {
+    return (
+      <RefreshControl
+        refreshing={this.state.refreshing}
+        onRefresh={this._onRefresh.bind(this)}/>
+    )
+  }
+
   render() {
     return (
-      <ScrollView>
-        <List
-          dataArray={this.state.movies}
-          renderRow={this._renderItem.bind(this)} />
-      </ScrollView>
+      <Container>
+        <HeaderBar />
+        <ScrollView refreshControl={this._refreshControl()}>
+          {this.state.loading ? (
+            <Spinner color='blue'/>
+          ) : (
+            <List
+              dataArray={this.state.movies}
+              renderRow={this._renderItem.bind(this)} />
+          )}
+        </ScrollView>
+      </Container>
     )
   }
 }

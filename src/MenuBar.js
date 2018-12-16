@@ -8,19 +8,19 @@ export default class MenuBar extends Component {
       <Footer>
         <FooterTab>
           <Button
-            onPress= {() => {Actions.movies()}}
+            onPress= {() => {Actions.movies(this.props)}}
             vertical>
             <Icon name="ios-videocam" />
             <Text>Movies</Text>
           </Button>
           <Button
-            onPress= {() => {Actions.musics()}}
+            onPress= {() => {Actions.musics(this.props)}}
             vertical>
             <Icon name="ios-musical-note" />
             <Text>Music</Text>
           </Button>
           <Button
-            onPress= {() => {Actions.settings()}}
+            onPress= {() => {Actions.settings(this.props)}}
             vertical>
             <Icon active name="ios-cog" />
             <Text>Settings</Text>
