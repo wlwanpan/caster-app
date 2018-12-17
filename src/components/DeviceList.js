@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { Alert } from 'react-native'
 import { List, Spinner, Text, Content } from 'native-base'
-import Item from './Item'
+import MediaItem from './MediaItem'
+import { connect } from 'react-redux'
 
-export default class DeviceList extends Component {
+class DeviceList extends Component {
 
   constructor(props) {
     super(props)
@@ -14,12 +15,9 @@ export default class DeviceList extends Component {
   }
 
   componentDidMount() {
-    if (this.props.baseurl == '') {
-      return
-    }
     console.log('Fetching devices')
     this.setState({loading: true})
-    fetch(`${this.props.baseurl}/devices`)
+    fetch(`${this.props.config.baseurl}/devices`)
     .then((data) => {
       return data.json()
     })
@@ -41,7 +39,7 @@ export default class DeviceList extends Component {
 
   _renderDevices(item) {
     return (
-      <Item
+      <MediaItem
         onPress={this._onPressDevice.bind(this)}
         id={item.uuid}
         name={item.name}/>
@@ -61,5 +59,16 @@ export default class DeviceList extends Component {
       </Content>
     )
   }
-
 }
+
+const mapStateToProps = state => {
+  return {
+    config: state.app.config
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeviceList)

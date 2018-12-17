@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { Container, Text } from 'native-base'
-import HeaderBar from './HeaderBar'
+import SearchHeader from './components/SearchHeader'
 
-export default class MusicList extends Component {
+export default class Music extends Component {
   render() {
     return (
       <Container>
-        <HeaderBar />
+        <SearchHeader />
         <Text>Music List</Text>
       </Container>
     )

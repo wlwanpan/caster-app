@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { ListItem } from 'native-base'
 import { Text, TouchableOpacity } from 'react-native'
 
-export default class Item extends Component {
+export default class MediaItem extends Component {
 
   _onPress() {
     this.props.onPress(this.props.id)

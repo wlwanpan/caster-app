@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { AsyncStorage, StyleSheet, ScrollView, Alert } from 'react-native'
 import { Header, Body, Right, Title, Button, Container,
          Content, Form, Text, Item, Label, Input } from 'native-base'
-import DeviceList from './DeviceList'
+import { Actions } from 'react-native-router-flux'
+import DeviceList from './components/DeviceList'
 
 export default class Settings extends Component {
 
@@ -36,10 +37,10 @@ export default class Settings extends Component {
       <Container>
         <Header>
           <Body>
-            <Title>Settings</Title>
+            <Title style={{marginLeft: 6}}>Settings</Title>
           </Body>
           <Right>
-            <Button transparent>
+            <Button transparent onPress={() => Actions.pop()}>
               <Text>Cancel</Text>
             </Button>
           </Right>
@@ -60,9 +61,7 @@ export default class Settings extends Component {
             </Item>
             <Item stackedLabel style={itemStyle} last>
               <Label>Available Devices</Label>
-              <DeviceList
-                baseurl={this.props.config.baseurl}
-                onPress={(defaultDevice) => this.setState({defaultDevice})}/>
+              <DeviceList onPress={(defaultDevice) => this.setState({defaultDevice})}/>
             </Item>
           </Form>
           <Button
