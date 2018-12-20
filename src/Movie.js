@@ -1,11 +1,11 @@
 import React,{ Component } from 'react'
 import { ScrollView, RefreshControl, Alert } from 'react-native'
-import { Container, List, Text, Spinner } from 'native-base'
-import { Actions } from 'react-native-router-flux'
+import { Container, List, Spinner } from 'native-base'
 import { connect } from 'react-redux'
 
 import MediaItem from './components/MediaItem'
 import SearchHeader from './components/SearchHeader'
+import Placeholder from './components/Placeholder'
 
 import { updateMovies } from './actions/app'
 
@@ -41,6 +41,10 @@ class Movie extends Component {
     .then((resp) => {
       console.log(resp)
       this.props.updateMovies(resp.data)
+    })
+    .catch((err) => {
+      console.log(err)
+      Alert.alert("Error loading movies.")
     })
     .finally(() => {
       this.setState({loading: false})
@@ -83,13 +87,23 @@ class Movie extends Component {
             refreshing={this.state.refreshing}
             onRefresh={this._fetchMovies.bind(this)}/>
         }>
-          {this.state.loading ? (
-            <Spinner color='blue'/>
-          ) : (
-            <List
-              dataArray={this.props.movies}
-              renderRow={this._renderItem.bind(this)} />
-          )}
+          {(() => {
+            if (this.state.loading) {
+              return (
+                <Spinner color='blue' />
+              )
+            } else if (this.props.movies == 0) {
+              return (
+                <Placeholder text="No movies available." />
+              )
+            } else {
+                return (
+                  <List
+                    dataArray={this.props.movies}
+                    renderRow={this._renderItem.bind(this)} />
+                )
+            }
+          })()}
         </ScrollView>
       </Container>
     )

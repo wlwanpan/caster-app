@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { Container, Text } from 'native-base'
 import SearchHeader from './components/SearchHeader'
+import Placeholder from './components/Placeholder'
 
 export default class Music extends Component {
   render() {
     return (
       <Container>
         <SearchHeader />
-        <Text>Music List</Text>
+        <Placeholder text="No music available."/>
       </Container>
     )
   }
