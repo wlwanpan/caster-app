@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, CardItem, Body, Text, Icon }  from 'native-base'
+import { Card, CardItem, Body, Text }  from 'native-base'
 
 export default class Placeholder extends Component {
   render() {

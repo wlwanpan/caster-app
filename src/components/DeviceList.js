@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { Alert } from 'react-native'
 import { List, Spinner, Text, Content } from 'native-base'
-import MediaItem from './MediaItem'
-import { connect } from 'react-redux'
+import DeviceItem from './DeviceItem'
 
 class DeviceList extends Component {
 
@@ -39,10 +38,10 @@ class DeviceList extends Component {
 
   _renderDevices(item) {
     return (
-      <MediaItem
-        onPress={this._onPressDevice.bind(this)}
-        id={item.uuid}
-        name={item.name}/>
+      <DeviceItem 
+        selected={this.props.selectedUUID == item.uuid}
+        device={item}
+        onPress={this._onPressDevice.bind(this)}/>
     )
   }
 
@@ -60,15 +59,3 @@ class DeviceList extends Component {
     )
   }
 }
-
-const mapStateToProps = state => {
-  return {
-    config: state.app.config
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(DeviceList)

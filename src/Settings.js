@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
-import { AsyncStorage, StyleSheet, ScrollView, Alert } from 'react-native'
+import { Alert } from 'react-native'
 import { Header, Body, Right, Title, Button, Container,
          Content, Form, Text, Item, Label, Input } from 'native-base'
 import { Actions } from 'react-native-router-flux'
 import DeviceList from './components/DeviceList'
 
+import Store from '../store'
+
 export default class Settings extends Component {
 
   constructor(props) {
     super(props)
+    this.store = Store.getInstance()
     this.state = {
-      addr: '192.168.1.70',
-      port: '4040',
-      defaultDevice: '',
+      ...this.store.getSettings(),
       devices: []
     }
   }
@@ -20,8 +21,7 @@ export default class Settings extends Component {
   _onSave() {
     let { addr, port, defaultDevice } = this.state
     let settings = {addr, port, defaultDevice}
-    let settingsAsStr = JSON.stringify(settings)
-    AsyncStorage.setItem('@App:settings', settingsAsStr)
+    this.store.saveSettings(settings)
     .then((resp) => {
       console.log(resp)
       Alert.alert("Settings successfully saved.")
@@ -61,7 +61,9 @@ export default class Settings extends Component {
             </Item>
             <Item stackedLabel style={itemStyle} last>
               <Label>Available Devices</Label>
-              <DeviceList onPress={(defaultDevice) => this.setState({defaultDevice})}/>
+              <DeviceList
+                selectedUUID={this.state.defaultDevice.uuid}
+                onPress={(defaultDevice) => this.setState({defaultDevice})}/>
             </Item>
           </Form>
           <Button

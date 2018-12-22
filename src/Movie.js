@@ -1,18 +1,18 @@
 import React,{ Component } from 'react'
 import { ScrollView, RefreshControl, Alert } from 'react-native'
 import { Container, List, Spinner } from 'native-base'
-import { connect } from 'react-redux'
 
 import MediaItem from './components/MediaItem'
 import SearchHeader from './components/SearchHeader'
 import Placeholder from './components/Placeholder'
 
-import { updateMovies } from './actions/app'
+import Store from '../store'
 
-class Movie extends Component {
+export default class Movie extends Component {
 
   constructor(props) {
     super(props)
+    this.store = Store.getInstance()
     this.state = {
       refreshing: false,
       loading: false,
@@ -21,18 +21,18 @@ class Movie extends Component {
   }
 
   componentDidMount() {
-    let baseurl = this.props.config.baseurl
-    if (baseurl && baseurl != '') {
+    let { addr, port } = this.store.getSettings()
+    if (addr && port) {
       this._fetchMovies()
     }
   }
 
   _getMovieUrl() {
-    return `${this.props.config.baseurl}/media?type=audio`
+    return `${this.store.getBaseurl()}/media?type=audio`
   }
 
   _fetchMovies() {
-    console.log("fetching movies: " + this.props.config.baseurl)
+    console.log("fetching movies: " + this._getMovieUrl())
     this.setState({loading: true})
     fetch(this._getMovieUrl())
     .then((data) => {
@@ -40,7 +40,8 @@ class Movie extends Component {
     })
     .then((resp) => {
       console.log(resp)
-      this.props.updateMovies(resp.data)
+      // this.props.updateMovies(resp.data)
+      this.setState({movies: resp.data})
     })
     .catch((err) => {
       console.log(err)
@@ -52,17 +53,18 @@ class Movie extends Component {
   }
 
   _onPressMovie(id) {
-    if (this.props.config.headers['device-uuid'] == "") {
+    if (!this.store.isDeviceSelected()) {
       Alert.alert("No device selected. Please go to settings.")
     }
-    fetch(`${this.props.config.baseurl}/media/${id}/cast`, {
+    fetch(`${this.store.getBaseurl()}/media/${id}/cast`, {
       method: 'POST',
-      headers: this.props.config.headers
+      headers: this.store.getHeaders()
     })
     .then((data) => {
       console.log(data)
     })
     .catch((err) => {
+      console.log(err)
       Alert.alert("Error casting media.")
     })
   }
@@ -80,7 +82,7 @@ class Movie extends Component {
     return (
       <Container>
         <SearchHeader
-          onSearch={(movies) => {this.props.updateMovies(movies)}}
+          onSearch={(movies) => {this.setState({movies})}}
           searchUrl={this._getMovieUrl()}/>
         <ScrollView refreshControl={
           <RefreshControl
@@ -92,14 +94,14 @@ class Movie extends Component {
               return (
                 <Spinner color='blue' />
               )
-            } else if (this.props.movies == 0) {
+            } else if (this.state.movies == 0) {
               return (
                 <Placeholder text="No movies available." />
               )
             } else {
                 return (
                   <List
-                    dataArray={this.props.movies}
+                    dataArray={this.state.movies}
                     renderRow={this._renderItem.bind(this)} />
                 )
             }
@@ -109,20 +111,3 @@ class Movie extends Component {
     )
   }
 }
-
-const mapStateToProps = state => {
-  return {
-    config: state.app.config,
-    movies: state.app.movies
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    updateMovies: (movies) => {
-      dispatch(updateMovies(movies))
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Movie)

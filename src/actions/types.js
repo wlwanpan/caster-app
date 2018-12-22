@@ -1,2 +1,0 @@
-export const UPDATE_CONFIG = 'UPDATE_CONFIG'
-export const UPDATE_MOVIES = 'UPDATE_MOVIES'
