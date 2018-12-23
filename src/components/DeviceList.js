@@ -3,7 +3,7 @@ import { Alert } from 'react-native'
 import { List, Spinner, Text, Content } from 'native-base'
 import DeviceItem from './DeviceItem'
 
-class DeviceList extends Component {
+export default class DeviceList extends Component {
 
   constructor(props) {
     super(props)
@@ -16,7 +16,7 @@ class DeviceList extends Component {
   componentDidMount() {
     console.log('Fetching devices')
     this.setState({loading: true})
-    fetch(`${this.props.config.baseurl}/devices`)
+    fetch(`${this.props.store.getBaseurl()}/devices`)
     .then((data) => {
       return data.json()
     })

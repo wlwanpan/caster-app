@@ -25,19 +25,19 @@ export default class Store {
   loadSettings() {
     return AsyncStorage.getItem(APP_SETTINGS)
     .then((resp) => {
+      console.log("Loading saved settings: " + resp)
       let { addr, port, defaultDevice } = JSON.parse(resp)
       this.settings = {
         addr,
         port,
         defaultDevice
       }
-      console.log(this.settings)
     })
   }
 
   saveSettings({ addr, port, defaultDevice }) {
     this.settings.addr = addr || this.settings.addr
-    this.settings.addr = port || this.settings.port
+    this.settings.port = port || this.settings.port
     let { name, uuid } = defaultDevice
     if (name && uuid) {
       this.settings.defaultDevice = defaultDevice

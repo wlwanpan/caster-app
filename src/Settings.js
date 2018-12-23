@@ -20,8 +20,7 @@ export default class Settings extends Component {
 
   _onSave() {
     let { addr, port, defaultDevice } = this.state
-    let settings = {addr, port, defaultDevice}
-    this.store.saveSettings(settings)
+    this.store.saveSettings({ addr, port, defaultDevice })
     .then((resp) => {
       console.log(resp)
       Alert.alert("Settings successfully saved.")
@@ -62,6 +61,7 @@ export default class Settings extends Component {
             <Item stackedLabel style={itemStyle} last>
               <Label>Available Devices</Label>
               <DeviceList
+                store={this.store}
                 selectedUUID={this.state.defaultDevice.uuid}
                 onPress={(defaultDevice) => this.setState({defaultDevice})}/>
             </Item>
