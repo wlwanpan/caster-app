@@ -24,7 +24,7 @@ export default class DeviceList extends Component {
       this.setState({devices: resp.data})
       console.log(this.state.devices)
     })
-    .catch((err) => {
+    .catch(() => {
       Alert.alert("Error scanning devices.")
     })
     .finally(() => {

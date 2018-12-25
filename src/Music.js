@@ -1,14 +1,30 @@
 import React, { Component } from 'react'
-import { Container, Text } from 'native-base'
+import { Container } from 'native-base'
+
 import SearchHeader from './components/SearchHeader'
-import Placeholder from './components/Placeholder'
+import MediaList from './components/MediaList'
 
 export default class Music extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      music: []
+    }
+  }
+
   render() {
     return (
       <Container>
-        <SearchHeader />
-        <Placeholder text="No music available."/>
+        <SearchHeader
+          mediaType={'audio'}
+          onSearch={(music) => {this.setState({music})}}
+          />
+        <MediaList
+          media={this.state.music}
+          mediaType={'audio'}
+          onChange={(music) => this.setState({music})}
+          />
       </Container>
     )
   }

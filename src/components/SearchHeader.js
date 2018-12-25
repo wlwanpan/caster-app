@@ -1,16 +1,29 @@
 import React, { Component } from 'react'
 import { Header, Item, Icon, Input, Text, Button } from 'native-base'
 
+import Store from '../../store'
+
 export default class SearchHeader extends Component {
 
+  constructor(props) {
+    super(props)
+    this.store = Store.getInstance()
+  }
+
+  _getMediaUrl() {
+    return `${this.store.getBaseurl()}/media?type=${this.props.mediaType}`
+  }
+
   _onChange(search) {
-    console.log("Search value: " + search)
-    fetch(`${this.props.searchUrl}&search=${search}`)
+    fetch(`${this._getMediaUrl()}&search=${search}`)
     .then((data) => {
       return data.json()
     })
     .then((resp) => {
       this.props.onSearch(resp.data)
+    })
+    .catch((err) => {
+      console.log(err)
     })
   }
 
