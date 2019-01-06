@@ -6,6 +6,7 @@ import Placeholder from './Placeholder'
 import MediaItem from './MediaItem'
 
 import Store from '../../store'
+import Controller from '../../controller'
 
 export default class MediaList extends Component {
 
@@ -25,39 +26,26 @@ export default class MediaList extends Component {
     }
   }
 
-  _getMediaUrl() {
-    let baseUrl = this.store.getBaseurl()
-    return `${baseUrl}/media?type=${this.props.mediaType}`
-  }
-
   _fetchMedia() {
-    console.log("fetching movies: " + this._getMediaUrl())
     this.setState({ loading: true })
-    fetch(this._getMediaUrl())
-      .then((data) => {
-        return data.json()
-      })
-      .then((resp) => {
-        console.log(resp)
-        this.props.onChange(resp.data)
-      })
-      .catch((err) => {
-        console.log(err)
-        Alert.alert("Error loading movies.")
-      })
-      .finally(() => {
-        this.setState({ loading: false })
-      })
+    Controller.getMedia(this.props.mediaType)
+    .then((resp) => {
+      this.props.onChange(resp.data)
+    })
+    .catch((err) => {
+      console.log(err)
+      Alert.alert("Error loading movies.")
+    })
+    .finally(() => {
+      this.setState({ loading: false })
+    })
   }
 
   _onPressMedia(id) {
     if (!this.store.isDeviceSelected()) {
       Alert.alert("No device selected. Please go to settings.")
     }
-    fetch(`${this.store.getBaseurl()}/media/${id}/cast`, {
-      method: 'POST',
-      headers: this.store.getHeaders()
-    })
+    Controller.playMedia(id)
     .then(() => {
       this.store.setCurrentMedia(id, 'playing')
     })

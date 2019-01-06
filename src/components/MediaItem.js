@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, DeviceEventEmitter } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import { ListItem, Icon, Left, Body, Right,
          Button, Text, Thumbnail } from 'native-base'
 

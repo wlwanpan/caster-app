@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ListItem, Button, Text } from 'native-base'
+import { ListItem, Button, Icon } from 'native-base'
 
 export default class DeviceItem extends Component {
 
@@ -15,17 +15,16 @@ export default class DeviceItem extends Component {
       }}>
         {this.props.selected ? (
           <Button
-            bordered full
+            bordered large
             onPress={this._onPress.bind(this)}>
-            <Text>{this.props.device.name}</Text>
           </Button>
         ) : (
-          <Button onPress={this._onPress.bind(this)} full>
-            <Text>{this.props.device.name}</Text>
+          <Button
+            transparent large
+            onPress={this._onPress.bind(this)} full>
           </Button>
         )}
       </ListItem>
-
     )
   }
 }
