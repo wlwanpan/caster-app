@@ -6,6 +6,7 @@ import MenuBar from './src/MenuBar'
 import Movie from './src/Movie'
 import Music from './src/Music'
 import Settings from './src/Settings'
+import Control from './src/Control'
 
 import Store from './store'
 
@@ -22,9 +23,10 @@ export default class App extends Component {
         <Router
           headerMode="screen">
           <Scene key="root" hideNavBar="true">
-            <Scene key="movies" component={Movie} initial={true}/>
-            <Scene key="musics" component={Music}/>
-            <Scene key="settings" component={Settings}/>
+            <Scene key="movies" component={Movie} initial={true} />
+            <Scene key="musics" component={Music} />
+            <Scene key="controls" component={Control} />
+            <Scene key="settings" component={Settings} />
           </Scene>
         </Router>
         <MenuBar />

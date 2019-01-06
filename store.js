@@ -1,10 +1,12 @@
-import { AsyncStorage } from 'react-native'
+import { AsyncStorage, DeviceEventEmitter } from 'react-native'
 
 const APP_SETTINGS = '@App:settings'
 
 export default class Store {
 
   static instance = null
+
+  currentMedia = {}
 
   settings = {
     addr: undefined,
@@ -65,6 +67,11 @@ export default class Store {
       'Content-Type': 'application/json',
       'device-uuid': this.settings.defaultDevice.uuid
     }
+  }
+
+  setCurrentMedia(id, action) {
+    this.currentMedia = { id, action }
+    DeviceEventEmitter.emit('current-media-state', this.currentMedia)
   }
 
 }

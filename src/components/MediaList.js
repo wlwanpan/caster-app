@@ -58,8 +58,8 @@ export default class MediaList extends Component {
       method: 'POST',
       headers: this.store.getHeaders()
     })
-    .then((data) => {
-      console.log(data)
+    .then(() => {
+      this.store.setCurrentMedia(id, 'playing')
     })
     .catch((err) => {
       console.log(err)
@@ -72,7 +72,8 @@ export default class MediaList extends Component {
       <MediaItem
         onPress={this._onPressMedia.bind(this)}
         id={item._id}
-        name={item.name} />
+        name={item.name}
+        metadata={item.metadata} />
     )
   }
 

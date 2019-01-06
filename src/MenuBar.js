@@ -10,19 +10,25 @@ export default class MenuBar extends Component {
           <Button
             onPress= {() => {Actions.movies(this.props)}}
             vertical>
-            <Icon name="ios-videocam" />
+            <Icon name="md-videocam" />
             <Text>Movies</Text>
           </Button>
           <Button
             onPress= {() => {Actions.musics(this.props)}}
             vertical>
-            <Icon name="ios-musical-note" />
+            <Icon name="md-musical-notes" />
             <Text>Music</Text>
+          </Button>
+          <Button
+            onPress={() => { Actions.controls(this.props) }}
+            vertical>
+            <Icon name="md-options" />
+            <Text>Controls</Text>
           </Button>
           <Button
             onPress= {() => {Actions.settings(this.props)}}
             vertical>
-            <Icon active name="ios-cog" />
+            <Icon active name="md-settings" />
             <Text>Settings</Text>
           </Button>
         </FooterTab>
