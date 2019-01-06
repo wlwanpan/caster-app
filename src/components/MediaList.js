@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, RefreshControl, Alert } from 'react-native'
+import { ScrollView, RefreshControl, Alert, DeviceEventEmitter } from 'react-native'
 import { Spinner, List } from 'native-base'
 
 import Placeholder from './Placeholder'
@@ -15,7 +15,8 @@ export default class MediaList extends Component {
     this.store = Store.getInstance()
     this.state = {
       refreshing: false,
-      loading: false
+      loading: false,
+      currentMedia: this.store.getCurrentMedia()
     }
   }
 
@@ -24,6 +25,10 @@ export default class MediaList extends Component {
     if (addr && port) {
       this._fetchMedia()
     }
+  }
+
+  componentWillMount() {
+    DeviceEventEmitter.addListener('current-media', this._onCurrentMediaChange.bind(this))
   }
 
   _fetchMedia() {
@@ -41,7 +46,14 @@ export default class MediaList extends Component {
     })
   }
 
-  _onPressMedia(id) {
+  _onCurrentMediaChange() {
+    this.setState({
+      ...this.state,
+      currentMedia: this.store.getCurrentMedia()
+    })
+  }
+
+  _onPlayMedia(id) {
     if (!this.store.isDeviceSelected()) {
       Alert.alert("No device selected. Please go to settings.")
     }
@@ -55,12 +67,27 @@ export default class MediaList extends Component {
     })
   }
 
+  _onPauseMedia(id) {
+    Controller.pauseMedia(id)
+    .then(() => {
+      this.store.setCurrentMedia(id, 'paused')
+    })
+    .catch((err) => {
+      console.log(err)
+      Alert.alert("Error casting media.")
+    })
+  }
+
   _renderItem(item) {
+    let { id, action } = this.state.currentMedia
+    let stateType = item._id == id ? action : undefined
     return (
       <MediaItem
-        onPress={this._onPressMedia.bind(this)}
+        onPlay={this._onPlayMedia.bind(this)}
+        onPause={this._onPauseMedia.bind(this)}
         id={item._id}
         name={item.name}
+        stateType={stateType}
         metadata={item.metadata} />
     )
   }

@@ -5,8 +5,20 @@ import { ListItem, Icon, Left, Body, Right,
 
 export default class MediaItem extends Component {
 
+  _onPlay() {
+    this.props.onPlay(this.props.id)
+  }
+
+  _onPause() {
+    this.props.onPause(this.props.id)
+  }
+
   _onPress() {
-    this.props.onPress(this.props.id)
+    if (this.props.stateType == 'paused') {
+      this._onPlay()
+    } else {
+      this._onPause()
+    }
   }
 
   render() {
@@ -26,9 +38,19 @@ export default class MediaItem extends Component {
           </TouchableOpacity>
         </Body>
         <Right>
-          <Button transparent>
-            <Icon name='md-play'/>
-          </Button>
+          {this.props.stateType == 'playing' ? (
+            <Button
+              onPress={this._onPlay.bind(this)}
+              transparent>
+              <Icon name='md-pause' />
+            </Button>
+          ) : (
+            <Button
+              onPress={this._onPause.bind(this)}
+              transparent>
+              <Icon name='md-play' />
+            </Button>
+          )}
         </Right>
       </ListItem>
     )

@@ -1,10 +1,23 @@
 import React, { Component } from 'react'
+import { Slider } from 'react-native'
 import { Container, Header, Body, Right, Title,
          Button, Content, Text } from 'native-base'
 
 import { Actions } from 'react-native-router-flux'
 
 export default class Control extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      volume: 0
+    }
+  }
+
+  _onVolumeChange(vol) {
+    console.log(vol)
+  }
+
   render() {
     return (
       <Container>
@@ -19,7 +32,12 @@ export default class Control extends Component {
           </Right>
         </Header>
         <Content>
-          <Text>Controls</Text>
+          <Text>Volume</Text>
+          <Slider
+            step={10}
+            maximumValue={100}
+            onValueChange={this._onVolumeChange.bind(this)}
+            value={this.state.volume} />
         </Content>
       </Container>
     )

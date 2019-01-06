@@ -6,7 +6,10 @@ export default class Store {
 
   static instance = null
 
-  currentMedia = {}
+  currentMedia = {
+    id: undefined,
+    action: undefined    
+  }
 
   settings = {
     addr: undefined,
@@ -71,7 +74,11 @@ export default class Store {
 
   setCurrentMedia(id, action) {
     this.currentMedia = { id, action }
-    DeviceEventEmitter.emit('current-media-state', this.currentMedia)
+    DeviceEventEmitter.emit('current-media', this.currentMedia)
+  }
+
+  getCurrentMedia() {
+    return this.currentMedia
   }
 
 }
