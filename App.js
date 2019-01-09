@@ -13,8 +13,7 @@ import Store from './store'
 export default class App extends Component {
 
   componentDidMount() {
-    let store = Store.getInstance()
-    store.loadSettings()
+    Store.init()
   }
 
   render() {

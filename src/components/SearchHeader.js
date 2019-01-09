@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Header, Item, Icon, Input, Text, Button } from 'native-base'
 
 import Store from '../../store'
+import Controller from '../../controller';
 
 export default class SearchHeader extends Component {
 
@@ -10,15 +11,8 @@ export default class SearchHeader extends Component {
     this.store = Store.getInstance()
   }
 
-  _getMediaUrl() {
-    return `${this.store.getBaseurl()}/media?type=${this.props.mediaType}`
-  }
-
   _onChange(search) {
-    fetch(`${this._getMediaUrl()}&search=${search}`)
-    .then((data) => {
-      return data.json()
-    })
+    Controller.searchMedia(this.props.mediaType, search)
     .then((resp) => {
       this.props.onSearch(resp.data)
     })

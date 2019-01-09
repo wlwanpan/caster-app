@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Alert } from 'react-native'
 import { List, Spinner, Text, Content } from 'native-base'
 import DeviceItem from './DeviceItem'
+import Controller from '../../controller';
 
 export default class DeviceList extends Component {
 
@@ -16,10 +17,7 @@ export default class DeviceList extends Component {
   componentDidMount() {
     console.log('Fetching devices')
     this.setState({loading: true})
-    fetch(`${this.props.store.getBaseurl()}/devices`)
-    .then((data) => {
-      return data.json()
-    })
+    Controller.getDevices()
     .then((resp) => {
       this.setState({devices: resp.data})
       console.log(this.state.devices)

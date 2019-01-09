@@ -20,6 +20,12 @@ export default class Store {
     }
   }
 
+  static init() {
+    let instance = Store.getInstance()
+    instance.loadSettings()
+    return instance
+  }
+
   static getInstance() {
     if (Store.instance == null) {
       Store.instance = new Store()
